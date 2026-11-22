@@ -25,5 +25,10 @@
 Que é "product name" da "row 6";
 A vírgula não separa as colunas por que o nome está entre aspas, assim a virgula faz parte do nome.
 
-## Respostas
-(Enunciados 4, 6 e 7)
+## FASE 2
+## ENUNCIADO 4 : 
+A regra 1: A regra 1 deixa o psql do CloudShell entrar pela internet, na porta 5432, sem ela a instância não teria acesso público.
+A regra 2: O grupo autoriza a si mesmo, o que permite que recursos de dentro do próprio grupo, como a placa de rede criada pelo job,
+ conversem entre si. Sem essa regra o grupo não consegue acessar os próprios recursos.
+
+ 
