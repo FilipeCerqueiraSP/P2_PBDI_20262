@@ -1,0 +1,137 @@
+{
+    "DBInstances": [
+        {
+            "DBInstanceIdentifier": "dw-superstore-2041382521022",
+            "DBInstanceClass": "db.t3.micro",
+            "Engine": "postgres",
+            "DBInstanceStatus": "available",
+            "MasterUsername": "postgres",
+            "DBName": "superstore_dw",
+            "Endpoint": {
+                "Address": "dw-superstore-2041382521022.che26uuuulro.us-east-1.rds.amazonaws.com",
+                "Port": 5432,
+                "HostedZoneId": "Z2R2ITUGPM61AM"
+            },
+            "AllocatedStorage": 20,
+            "InstanceCreateTime": "2026-11-22T02:29:30.011000+00:00",
+            "PreferredBackupWindow": "06:05-06:35",
+            "BackupRetentionPeriod": 1,
+            "DBSecurityGroups": [],
+            "VpcSecurityGroups": [
+                {
+                    "VpcSecurityGroupId": "sg-0b8a1d23c74aa1af2",
+                    "Status": "active"
+                }
+            ],
+            "DBParameterGroups": [
+                {
+                    "DBParameterGroupName": "default.postgres18",
+                    "ParameterApplyStatus": "in-sync"
+                }
+            ],
+            "AvailabilityZone": "us-east-1a",
+            "DBSubnetGroup": {
+                "DBSubnetGroupName": "default-vpc-07ac7ecd40eaea72b",
+                "DBSubnetGroupDescription": "Created from the RDS Management Console",
+                "VpcId": "vpc-07ac7ecd40eaea72b",
+                "SubnetGroupStatus": "Complete",
+                "Subnets": [
+                    {
+                        "SubnetIdentifier": "subnet-06eb12aa75a7df4a2",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1b"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-0df31a73f39bdc70b",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1d"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-02d740d1c2b33900a",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1f"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-01e78a6b50a957c0c",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1e"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-089133ea3f1b2ccca",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1a"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    },
+                    {
+                        "SubnetIdentifier": "subnet-02d86f0fd29b98213",
+                        "SubnetAvailabilityZone": {
+                            "Name": "us-east-1c"
+                        },
+                        "SubnetOutpost": {},
+                        "SubnetStatus": "Active"
+                    }
+                ]
+            },
+            "PreferredMaintenanceWindow": "fri:03:30-fri:04:00",
+            "UpgradeRolloutOrder": "second",
+            "PendingModifiedValues": {},
+            "LatestRestorableTime": "2026-11-22T02:30:38.447000+00:00",
+            "MultiAZ": false,
+            "EngineVersion": "18.3",
+            "AutoMinorVersionUpgrade": true,
+            "ReadReplicaDBInstanceIdentifiers": [],
+            "LicenseModel": "postgresql-license",
+            "StorageThroughput": 0,
+            "OptionGroupMemberships": [
+                {
+                    "OptionGroupName": "default:postgres-18",
+                    "Status": "in-sync"
+                }
+            ],
+            "PubliclyAccessible": true,
+            "StorageType": "gp2",
+            "DbInstancePort": 0,
+            "StorageEncrypted": true,
+            "KmsKeyId": "arn:aws:kms:us-east-1:339713019868:key/069ac0fd-41c1-40cc-8ffa-90553d2066d7",
+            "DbiResourceId": "db-YB5BWXSIUK3GGAMG7PFZFZKB3Y",
+            "CACertificateIdentifier": "rds-ca-rsa2048-g1",
+            "DomainMemberships": [],
+            "CopyTagsToSnapshot": true,
+            "MonitoringInterval": 0,
+            "DBInstanceArn": "arn:aws:rds:us-east-1:339713019868:db:dw-superstore-2041382521022",
+            "IAMDatabaseAuthenticationEnabled": false,
+            "DatabaseInsightsMode": "standard",
+            "PerformanceInsightsEnabled": true,
+            "PerformanceInsightsKMSKeyId": "arn:aws:kms:us-east-1:339713019868:key/069ac0fd-41c1-40cc-8ffa-90553d2066d7",
+            "PerformanceInsightsRetentionPeriod": 7,
+            "DeletionProtection": false,
+            "AssociatedRoles": [],
+            "TagList": [],
+            "CustomerOwnedIpEnabled": false,
+            "NetworkType": "IPV4",
+            "ActivityStreamStatus": "stopped",
+            "BackupTarget": "region",
+            "CertificateDetails": {
+                "CAIdentifier": "rds-ca-rsa2048-g1",
+                "ValidTill": "2027-11-22T02:28:13+00:00"
+            },
+            "DedicatedLogVolume": false,
+            "IsStorageConfigUpgradeAvailable": false,
+            "EngineLifecycleSupport": "open-source-rds-extended-support-disabled"
+        }
+    ]
+}
