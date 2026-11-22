@@ -38,3 +38,10 @@ A vírgula não separa as colunas por que o nome está entre aspas, assim a virg
 - O endpoint de interface é uma placa de rede com IPs privados para usar de credencial nos serviços AWS, não usa gateway
 por que o endpoint gatway só existe pro S3 e pro DynamoDB.
 - Se o DNS privado estiver desligado, a placa do JOB fica sem rota e retorna erro "tempo esgotado".
+
+## FASE 4
+## ENUNCIADO 7:
+- row id  = bigint         O crawler identificou que todos os valores eram numéricos e inteiros.
+- postal code = bigint     O crawler identificou que todos os valores eram numéricos e inteiros.
+- sales  = double          O crawler identificou que os valores eram numéricos e tinham casas decimais.
+                           Obs. As demais são string para garantir que não hajam perdas nas informações.
