@@ -27,8 +27,14 @@ A vírgula não separa as colunas por que o nome está entre aspas, assim a virg
 
 ## FASE 2
 ## ENUNCIADO 4 : 
-A regra 1: A regra 1 deixa o psql do CloudShell entrar pela internet, na porta 5432, sem ela a instância não teria acesso público.
-A regra 2: O grupo autoriza a si mesmo, o que permite que recursos de dentro do próprio grupo, como a placa de rede criada pelo job,
+- A regra 1: A regra 1 deixa o psql do CloudShell entrar pela internet, na porta 5432, sem ela a instância não teria acesso público.
+- A regra 2: O grupo autoriza a si mesmo, o que permite que recursos de dentro do próprio grupo, como a placa de rede criada pelo job,
  conversem entre si. Sem essa regra o grupo não consegue acessar os próprios recursos.
 
  
+## FASE 3
+## ENUNCIADO 6 :
+- O endpoint de gateway é só mais uma rota na tabela de rotas, permite acessar sem custo por hora.
+- O endpoint de interface é uma placa de rede com IPs privados para usar de credencial nos serviços AWS, não usa gateway
+por que o endpoint gatway só existe pro S3 e pro DynamoDB.
+- Se o DNS privado estiver desligado, a placa do JOB fica sem rota e retorna erro "tempo esgotado".
