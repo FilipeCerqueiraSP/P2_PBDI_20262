@@ -2,8 +2,8 @@
 
 ## Integrantes
 
-- Filipe Henrique Silva Cerqueira - RA 204138252100
-- Thais Mauro Franco – RA 204138252100
+- Filipe Henrique Silva Cerqueira - RA 2041382521022
+- Thais Mauro Franco – RA 2041382521032
 - Wilian Aparecido Domingos – RA 204138252118
 
 ## Ambiente AWS
