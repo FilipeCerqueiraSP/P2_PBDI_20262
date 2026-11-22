@@ -1,0 +1,330 @@
+{
+    "Job": {
+        "Name": "job-superstore-etl-2041382521022",
+        "JobMode": "VISUAL",
+        "JobRunQueuingEnabled": false,
+        "Description": "",
+        "Role": "arn:aws:iam::339713019868:role/LabRole",
+        "CreatedOn": "2026-11-22T23:06:36.280000+00:00",
+        "LastModifiedOn": "2026-11-22T23:06:36.280000+00:00",
+        "ExecutionProperty": {
+            "MaxConcurrentRuns": 1
+        },
+        "Command": {
+            "Name": "glueetl",
+            "ScriptLocation": "s3://aws-glue-assets-339713019868-us-east-1/scripts/job-superstore-etl-2041382521022.py",
+            "PythonVersion": "3"
+        },
+        "DefaultArguments": {
+            "--enable-metrics": "",
+            "--enable-spark-ui": "true",
+            "--spark-event-logs-path": "s3://aws-glue-assets-339713019868-us-east-1/sparkHistoryLogs/",
+            "--enable-job-insights": "true",
+            "--enable-observability-metrics": "true",
+            "--conf": "spark.eventLog.rolling.enabled=true --conf spark.sql.catalog.glue_catalog.glue.skip-name-validation=true",
+            "--enable-glue-datacatalog": "",
+            "--enable-continuous-cloudwatch-log": "true",
+            "--job-bookmark-option": "job-bookmark-disable",
+            "--job-language": "python",
+            "--TempDir": "s3://aws-glue-assets-339713019868-us-east-1/temporary/"
+        },
+        "Connections": {
+            "Connections": [
+                "conn-rds-superstore-2041382521022"
+            ]
+        },
+        "MaxRetries": 0,
+        "AllocatedCapacity": 2,
+        "Timeout": 10,
+        "MaxCapacity": 2.0,
+        "WorkerType": "G.1X",
+        "NumberOfWorkers": 2,
+        "GlueVersion": "6.0",
+        "CodeGenConfigurationNodes": {
+            "node-1795386936678": {
+                "CatalogSource": {
+                    "Name": "AWS Glue Data Catalog",
+                    "Database": "superstore_catalog",
+                    "Table": "bruto",
+                    "PartitionPredicate": ""
+                }
+            },
+            "node-1795387017218": {
+                "ApplyMapping": {
+                    "Name": "Change Schema",
+                    "Inputs": [
+                        "node-1795386936678"
+                    ],
+                    "Mapping": [
+                        {
+                            "ToKey": "row_id",
+                            "FromPath": [
+                                "row id"
+                            ],
+                            "FromType": "long",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "order_id",
+                            "FromPath": [
+                                "order id"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "order_date",
+                            "FromPath": [
+                                "order date"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "ship_date",
+                            "FromPath": [
+                                "ship date"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "ship_mode",
+                            "FromPath": [
+                                "ship mode"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "customer_id",
+                            "FromPath": [
+                                "customer id"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "customer_name",
+                            "FromPath": [
+                                "customer name"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "segment",
+                            "FromPath": [
+                                "segment"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "country",
+                            "FromPath": [
+                                "country"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "city",
+                            "FromPath": [
+                                "city"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "state",
+                            "FromPath": [
+                                "state"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "postal_code",
+                            "FromPath": [
+                                "postal code"
+                            ],
+                            "FromType": "long",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "region",
+                            "FromPath": [
+                                "region"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "product_id",
+                            "FromPath": [
+                                "product id"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "category",
+                            "FromPath": [
+                                "category"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "sub_category",
+                            "FromPath": [
+                                "sub-category"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "product_name",
+                            "FromPath": [
+                                "product name"
+                            ],
+                            "FromType": "string",
+                            "ToType": "string",
+                            "Dropped": false
+                        },
+                        {
+                            "ToKey": "sales",
+                            "FromPath": [
+                                "sales"
+                            ],
+                            "FromType": "double",
+                            "ToType": "string",
+                            "Dropped": false
+                        }
+                    ]
+                }
+            },
+            "node-1795387373101": {
+                "SparkSQL": {
+                    "Name": "SQL Query",
+                    "Inputs": [
+                        "node-1795387017218"
+                    ],
+                    "SqlQuery": "SELECT\r\n    CAST(TRIM(row_id) AS INT) AS row_id,\r\n    TRIM(order_id) AS order_id,\r\n    TO_DATE(TRIM(order_date), 'dd/MM/yyyy') AS order_date,\r\n    TO_DATE(TRIM(ship_date), 'dd/MM/yyyy') AS ship_date,\r\n    TRIM(ship_mode) AS ship_mode,\r\n    TRIM(customer_id) AS customer_id,\r\n    TRIM(customer_name) AS customer_name,\r\n    TRIM(segment) AS segment,\r\n    TRIM(country) AS country,\r\n    TRIM(city) AS city,\r\n    TRIM(state) AS state,\r\n    COALESCE(NULLIF(TRIM(postal_code), ''), 'N/D') AS postal_code,\r\n    TRIM(region) AS region,\r\n    TRIM(product_id) AS product_id,\r\n    TRIM(category) AS category,\r\n    TRIM(sub_category) AS sub_category,\r\n    TRIM(product_name) AS product_name,\r\n    CAST(TRIM(sales) AS DECIMAL(12,2)) AS sales\r\nFROM myDataSource",
+                    "SqlAliases": [
+                        {
+                            "From": "node-1795387017218",
+                            "Alias": "myDataSource"
+                        }
+                    ],
+                    "OutputSchemas": [
+                        {
+                            "Columns": [
+                                {
+                                    "Name": "row_id",
+                                    "Type": "int"
+                                },
+                                {
+                                    "Name": "order_id",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "order_date",
+                                    "Type": "date"
+                                },
+                                {
+                                    "Name": "ship_date",
+                                    "Type": "date"
+                                },
+                                {
+                                    "Name": "ship_mode",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "customer_id",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "customer_name",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "segment",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "country",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "city",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "state",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "postal_code",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "region",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "product_id",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "category",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "sub_category",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "product_name",
+                                    "Type": "string"
+                                },
+                                {
+                                    "Name": "sales",
+                                    "Type": "decimal(10,2)"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "node-1795388086505": {
+                "PostgreSQLCatalogTarget": {
+                    "Name": "PostgreSQL",
+                    "Inputs": [
+                        "node-1795387373101"
+                    ],
+                    "Database": "superstore_catalog",
+                    "Table": "superstore_dw_staging_sales"
+                }
+            }
+        },
+        "ExecutionClass": "STANDARD"
+    }
+}

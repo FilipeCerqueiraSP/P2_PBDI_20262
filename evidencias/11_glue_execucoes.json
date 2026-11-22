@@ -1,0 +1,26 @@
+{
+    "JobRuns": [
+        {
+            "Id": "jr_0a51940f57da50cdfc6efafded3c2db68dbd4d4257bc1972a858a48a4bac7294",
+            "Attempt": 0,
+            "JobName": "job-superstore-etl-2041382521022",
+            "JobMode": "VISUAL",
+            "JobRunQueuingEnabled": false,
+            "StartedOn": "2026-11-22T23:07:46.144000+00:00",
+            "LastModifiedOn": "2026-11-22T23:10:04.834000+00:00",
+            "CompletedOn": "2026-11-22T23:10:04.834000+00:00",
+            "JobRunState": "SUCCEEDED",
+            "PredecessorRuns": [],
+            "AllocatedCapacity": 2,
+            "ExecutionTime": 113,
+            "Timeout": 10,
+            "MaxCapacity": 2.0,
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 2,
+            "LogGroupName": "/aws-glue/jobs",
+            "GlueVersion": "6.0",
+            "DPUSeconds": 227.0,
+            "ExecutionClass": "STANDARD"
+        }
+    ]
+}

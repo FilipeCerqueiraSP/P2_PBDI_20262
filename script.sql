@@ -28,3 +28,22 @@ CREATE TABLE IF NOT EXISTS staging.sales (
     sales         NUMERIC(12,2) NOT NULL
 );
 
+ ----------------------------------------------------------------------------
+-- Fase 5 - Enunciado 10
+-- Escreva uma única consulta sobre staging.sales que devolva, em uma linha: a quantidade de
+-- linhas, a soma de sales, a menor data de pedido, a maior data de envio, a quantidade de
+-- códigos postais 'N/D' e a quantidade de linhas com data de envio anterior à data do pedido.
+-- Registre os valores em comentário. A quantidade de linhas e a de códigos postais 'N/D' devem
+-- coincidir com as respostas (a) e (c) do Enunciado 2.
+
+SELECT COUNT(*) AS quantidade_linhas,
+       SUM(sales) AS soma_sales,
+       MIN(order_date) AS menor_data_pedido,
+       MAX(ship_date) AS maior_data_envio,
+       (SELECT COUNT(*) FROM staging.sales
+        WHERE postal_code = 'N/D') AS postais_nd,
+       (SELECT COUNT(*) FROM staging.sales
+        WHERE ship_date < order_date) AS envios_anteriores
+FROM staging.sales;
+
+------------------------------------------------
