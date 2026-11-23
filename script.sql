@@ -425,3 +425,72 @@ SELECT (SELECT COUNT(*) FROM dw.carga_log) AS linhas_log,
        (SELECT COUNT(*) FROM dw.fact_sales) AS linhas_fato,
        (SELECT COUNT(*) FROM dw.carga_log)
          - (SELECT COUNT(*) FROM dw.fact_sales) AS diferenca;
+
+
+
+----------------------------------------------------------------------------------
+-- Fase 9 - enuciado 16
+-- Mostre, para cada região e categoria, a quantidade de pedidos distintos, a quantidade de
+-- itens vendidos e a receita, da maior para a menor receita.
+------------------------------------------------------------------------------
+SELECT l.region, p.category,
+       COUNT(DISTINCT f.order_nk) AS pedidos_distintos,
+       COUNT(*) AS itens_vendidos,
+       SUM(f.sales) AS receita
+FROM dw.fact_sales f
+JOIN dw.dim_location l ON l.location_sk = f.location_sk
+JOIN dw.dim_product p ON p.product_sk = f.product_sk
+GROUP BY l.region, p.category
+ORDER BY receita DESC;
+
+---------------------------------------------------------------------
+-- Fase 9 - enunciado 17
+-- Mostre, para cada modalidade de envio, a quantidade de itens, a média de ship_days
+-- arredondada para uma casa decimal e o menor e o maior valor de ship_days, da menor para a
+-- maior média.
+------------------------------------------------------------------------------
+SELECT m.ship_mode,
+       COUNT(*) AS quantidade_itens,
+       ROUND(AVG(f.ship_days), 1) AS media_ship_days,
+       MIN(f.ship_days) AS menor_ship_days,
+       MAX(f.ship_days) AS maior_ship_days
+FROM dw.fact_sales f
+JOIN dw.dim_ship_mode m ON m.ship_mode_sk = f.ship_mode_sk
+GROUP BY m.ship_mode
+ORDER BY media_ship_days ASC;
+
+------------------------------------------------------------
+-- ENUNCIADO 18 | Fase 9 | texto do enunciado da prova:
+-- Mostre os dez clientes de maior receita, com nome, segmento, receita e participação
+-- percentual na receita total de todos os clientes, arredondada para duas casas, usando uma
+-- função de janela como na Seção 15.3 da apostila.
+-----------------------------------------------------------------------------
+
+SELECT c.customer_name AS nome,
+       c.segment AS segmento,
+       SUM(f.sales) AS receita,
+       ROUND(100.0 * SUM(f.sales)
+             / SUM(SUM(f.sales)) OVER (), 2) AS participacao_pct
+FROM dw.fact_sales f
+JOIN dw.dim_customer c ON c.customer_sk = f.customer_sk
+GROUP BY c.customer_sk, c.customer_name, c.segment
+ORDER BY receita DESC
+LIMIT 10;
+
+------------------------------------------------------------------------------
+-- Fase 9 - Enunciado 19
+-- Usando a dw.dim_date nos seus dois papéis, mostre, para cada ano do pedido, a quantidade de
+-- itens, a receita e quantos desses itens foram enviados em fim de semana, em ordem
+-- cronológica.
+------------------------------------------------------------------------------
+
+SELECT pedido.year AS ano_pedido,
+       COUNT(*) AS quantidade_itens,
+       SUM(f.sales) AS receita,
+       COUNT(NULLIF(envio.is_weekend, FALSE)) AS envios_fim_semana
+FROM dw.fact_sales f
+JOIN dw.dim_date pedido ON pedido.date_sk = f.order_date_sk
+JOIN dw.dim_date envio ON envio.date_sk = f.ship_date_sk
+GROUP BY pedido.year
+ORDER BY pedido.year;
+

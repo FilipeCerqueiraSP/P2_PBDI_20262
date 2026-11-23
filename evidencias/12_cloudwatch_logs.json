@@ -6,7 +6,7 @@
             "firstEventTimestamp": 1795388961763,
             "lastEventTimestamp": 1795388961763,
             "lastIngestionTime": 1795388962510,
-            "uploadSequenceToken": "49039859694189715758993886469257264626001065992133084237",
+            "uploadSequenceToken": "49039859694189715758993886585112569988607932997812760220",
             "arn": "arn:aws:logs:us-east-1:339713019868:log-group:/aws-glue/jobs/output:log-stream:jr_0a51940f57da50cdfc6efafded3c2db68dbd4d4257bc1972a858a48a4bac7294",
             "storedBytes": 0
         }
