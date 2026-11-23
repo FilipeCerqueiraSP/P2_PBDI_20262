@@ -347,3 +347,81 @@ SELECT 'fact_sales', COUNT(*) FROM dw.fact_sales;
 --NOTICE:  Fato carregado: 9800 linhas
 --NOTICE:  Carga concluida com sucesso
 -------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------
+-- Fase 8 - Enunciado 15
+-- Crie a tabela dw.carga_log (identificador SERIAL, sale_sk, row_nk, operação, usuário e
+-- momento), a função dw.audita_fact_sales() e o trigger trg_audita_fact_sales, BEFORE INSERT e
+-- FOR EACH ROW sobre dw.fact_sales, como na Seção 14 da apostila. A função rejeita, com RAISE
+-- EXCEPTION e mensagem que identifique a linha, vendas com valor menor ou igual a zero e vendas
+-- com ship_days negativo, e registra no log toda linha aceita. Teste com uma inserção válida e
+-- deixe comentada uma inválida, acompanhada do erro esperado. Por fim, esvazie o log
+-- reiniciando a sequência, chame novamente a procedure e confira que o log tem exatamente uma
+-- linha por linha da fato.
+
+CREATE TABLE dw.carga_log (
+    log_id SERIAL PRIMARY KEY,
+    sale_sk INTEGER NOT NULL,
+    row_nk INTEGER NOT NULL,
+    operacao VARCHAR(10) NOT NULL,
+    usuario VARCHAR(60) NOT NULL,
+    momento TIMESTAMP NOT NULL
+);
+
+CREATE OR REPLACE FUNCTION dw.audita_fact_sales()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NEW.sales <= 0 THEN
+        RAISE EXCEPTION 'Venda row_nk=% rejeitada: valor invalido (%)',
+                        NEW.row_nk, NEW.sales;
+    END IF;
+    IF NEW.ship_days < 0 THEN
+        RAISE EXCEPTION 'Venda row_nk=% rejeitada: envio negativo (%)',
+                        NEW.row_nk, NEW.ship_days;
+    END IF;
+    INSERT INTO dw.carga_log (sale_sk, row_nk, operacao, usuario, momento)
+    VALUES (NEW.sale_sk, NEW.row_nk, TG_OP, CURRENT_USER, NOW());
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_audita_fact_sales
+BEFORE INSERT ON dw.fact_sales
+FOR EACH ROW
+EXECUTE FUNCTION dw.audita_fact_sales();
+
+-- Insere uma unica linha VALIDA para testar o disparo do trigger.
+-- Reusa chaves existentes; row_nk -1 nao colide com o CSV.
+INSERT INTO dw.fact_sales (
+    row_nk, order_nk, order_date_sk, ship_date_sk,
+    customer_sk, product_sk, location_sk, ship_mode_sk, sales, ship_days
+)
+SELECT -1, 'TESTE-VALIDO', f.order_date_sk, f.ship_date_sk,
+       f.customer_sk, f.product_sk, f.location_sk, f.ship_mode_sk,
+       1.00, 0
+FROM dw.fact_sales f
+LIMIT 1;
+
+
+------------------ Teste INVALIDO ----------------------------------------------
+-- INSERT INTO dw.fact_sales (
+--   row_nk, order_nk, order_date_sk, ship_date_sk,
+--   customer_sk, product_sk, location_sk, ship_mode_sk, sales, ship_days
+-- )
+-- SELECT -2, 'TESTE', f.order_date_sk, f.ship_date_sk,
+--        f.customer_sk, f.product_sk, f.location_sk, f.ship_mode_sk,
+--        0.00, 0
+-- FROM dw.fact_sales f LIMIT 1;
+-- Erro esperado: Venda row_nk=-2 rejeitada: valor invalido (0.00)
+
+
+TRUNCATE TABLE dw.carga_log RESTART IDENTITY;
+CALL dw.carrega_dw();
+
+-- Esperado: 9800 linhas na fato, 9800 no log, diferenca zero.
+SELECT (SELECT COUNT(*) FROM dw.carga_log) AS linhas_log,
+       (SELECT COUNT(*) FROM dw.fact_sales) AS linhas_fato,
+       (SELECT COUNT(*) FROM dw.carga_log)
+         - (SELECT COUNT(*) FROM dw.fact_sales) AS diferenca;
