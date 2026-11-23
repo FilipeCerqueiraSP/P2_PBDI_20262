@@ -201,3 +201,149 @@ CREATE INDEX ix_fs_ship_mode ON dw.fact_sales(ship_mode_sk);
 
 
 -------------------------------------------------------------
+-------------------------------------------------------------
+-------------------------------------------------------------
+
+-- FASE 7 - ENUNCIADO 14
+
+
+CREATE OR REPLACE PROCEDURE dw.carrega_dw()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_linhas INTEGER;
+    v_staging BIGINT;
+    v_fato BIGINT;
+
+BEGIN
+    -- ETAPA 1: limpa o modelo dimensional E Reinicia as sequencias, sem apagar a dim_date. ( item A)
+
+    TRUNCATE TABLE dw.fact_sales, dw.dim_customer,
+                   dw.dim_product, dw.dim_location,
+                   dw.dim_ship_mode
+             RESTART IDENTITY CASCADE;
+
+    RAISE NOTICE 'Modelo dimensional limpo';
+
+
+    -- ETAPA 2: montando as dimensoes, a partir dos dados da staging (item b)
+
+
+    INSERT INTO dw.dim_customer (customer_id, customer_name, segment)
+    SELECT customer_id, MIN(customer_name), MIN(segment)
+    FROM staging.sales
+    GROUP BY customer_id;
+
+    -- Contagem de linhas inseridas (item d)
+    GET DIAGNOSTICS v_linhas = ROW_COUNT;
+    RAISE NOTICE 'Clientes carregados: % linhas', v_linhas;
+
+
+    INSERT INTO dw.dim_product (product_id, product_name, category, sub_category)
+    SELECT product_id, MIN(product_name), MIN(category), MIN(sub_category)
+    FROM staging.sales
+    GROUP BY product_id;
+
+    GET DIAGNOSTICS v_linhas = ROW_COUNT;
+    RAISE NOTICE 'Produtos carregados: % linhas', v_linhas;
+
+
+    INSERT INTO dw.dim_location (country, state, city, postal_code, region)
+    SELECT country, state, city, postal_code, MIN(region)
+    FROM staging.sales
+    GROUP BY country, state, city, postal_code;
+
+    GET DIAGNOSTICS v_linhas = ROW_COUNT;
+    RAISE NOTICE 'Localizacoes carregadas: % linhas', v_linhas;
+
+
+    INSERT INTO dw.dim_ship_mode (ship_mode)
+    SELECT DISTINCT ship_mode FROM staging.sales;
+
+    GET DIAGNOSTICS v_linhas = ROW_COUNT;
+    RAISE NOTICE 'Modalidades carregadas: % linhas', v_linhas;
+
+    RAISE NOTICE 'Dimensoes carregadas';
+
+
+    -- ETAPA 3: montagem da fato (item c)
+  
+
+    INSERT INTO dw.fact_sales (
+        row_nk, order_nk, order_date_sk, ship_date_sk,
+        customer_sk, product_sk, location_sk, ship_mode_sk,
+        sales, ship_days
+    )
+    SELECT
+        s.row_id,
+        s.order_id,
+        CAST(TO_CHAR(s.order_date, 'YYYYMMDD') AS INTEGER),
+        CAST(TO_CHAR(s.ship_date, 'YYYYMMDD') AS INTEGER),
+        dc.customer_sk,
+        dp.product_sk,
+        dl.location_sk,
+        dm.ship_mode_sk,
+        s.sales,
+        s.ship_date - s.order_date
+    FROM staging.sales s
+    JOIN dw.dim_customer dc
+         ON dc.customer_id = s.customer_id
+    JOIN dw.dim_product dp
+         ON dp.product_id = s.product_id
+    JOIN dw.dim_location dl
+         ON dl.country = s.country
+         AND dl.state = s.state
+         AND dl.city = s.city
+         AND dl.postal_code = s.postal_code
+    JOIN dw.dim_ship_mode dm
+         ON dm.ship_mode = s.ship_mode;
+
+
+    GET DIAGNOSTICS v_linhas = ROW_COUNT;
+    RAISE NOTICE 'Fato carregado: % linhas', v_linhas;
+
+
+    -- ETAPA 4: confere se a fato equivale a stanging, se não, retorna erro (item e)
+
+
+    SELECT COUNT(*) INTO v_staging FROM staging.sales;
+    SELECT COUNT(*) INTO v_fato FROM dw.fact_sales;
+
+    IF v_fato <> v_staging THEN
+        RAISE EXCEPTION 'Carga inconsistente: staging=%; fato=%',
+                        v_staging, v_fato;
+    END IF;
+
+    RAISE NOTICE 'Carga concluida com sucesso';
+
+END;
+$$;
+
+
+-- EXECUTAR A PROCEDURE
+
+CALL dw.carrega_dw();
+
+
+-- Conferindo as quantidades de linhas das quatro dimensoes e da fato
+
+SELECT 'dim_customer' AS tabela, COUNT(*) AS linhas FROM dw.dim_customer
+UNION ALL
+SELECT 'dim_product', COUNT(*) FROM dw.dim_product
+UNION ALL
+SELECT 'dim_location', COUNT(*) FROM dw.dim_location
+UNION ALL
+SELECT 'dim_ship_mode', COUNT(*) FROM dw.dim_ship_mode
+UNION ALL
+SELECT 'fact_sales', COUNT(*) FROM dw.fact_sales;
+
+
+--NOTICE:  Modelo dimensional limpo
+--NOTICE:  Clientes carregados: 793 linhas
+--NOTICE:  Produtos carregados: 1861 linhas
+--NOTICE:  Localizacoes carregadas: 628 linhas
+--NOTICE:  Modalidades carregadas: 4 linhas
+--NOTICE:  Dimensoes carregadas
+--NOTICE:  Fato carregado: 9800 linhas
+--NOTICE:  Carga concluida com sucesso
+-------------------------------------------------------------------------------------
